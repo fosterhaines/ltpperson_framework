@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LTPPerson_Framework", "LTPPerson_Framework\LTPPerson_Framework.csproj", "{99D2CB32-5C41-4CFA-B932-C0A01CC243DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LTPPerson_Framework.Tests", "LTPPerson_Framework.Tests\LTPPerson_Framework.Tests.csproj", "{4A7C6A04-F8F5-4942-9226-D5ADA50BAE60}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99D2CB32-5C41-4CFA-B932-C0A01CC243DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D2CB32-5C41-4CFA-B932-C0A01CC243DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99D2CB32-5C41-4CFA-B932-C0A01CC243DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99D2CB32-5C41-4CFA-B932-C0A01CC243DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A7C6A04-F8F5-4942-9226-D5ADA50BAE60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A7C6A04-F8F5-4942-9226-D5ADA50BAE60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A7C6A04-F8F5-4942-9226-D5ADA50BAE60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A7C6A04-F8F5-4942-9226-D5ADA50BAE60}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2AD93640-D7EC-4D01-96C1-BB933AC5D99C}
+	EndGlobalSection
+EndGlobal
