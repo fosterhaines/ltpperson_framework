@@ -1,0 +1,107 @@
+﻿@model IEnumerable<LTPPerson_Framework.Models.person>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" id="load-partial">Load Create Modal</button>
+
+<p>
+    @Html.ActionLink("Create New", "_Create", null, new { @class = "btn btn-success", id = "createLink" })
+</p>
+<p>
+    <a id="createPersonLink" data-toggle="modal" asp-action="_Create" data-target="#modal-container">Create Person</a>
+</p>
+<button class="btn btn-sm" data-toggle="modal" data-target="exampleModal" id="smButton">Create Small Person</button>
+<div id="modal-container" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Create Person</h4>
+            </div>
+            <div class="modal-body">
+                <div id="partial"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+        </div>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.first_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.last_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dob)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.state.state_code)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.first_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.last_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dob)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.state.state_code)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.person_id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.person_id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.person_id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section Scripts {
+<script type="text/javascript">
+        $(function () {
+            $('#load-partial').on('click', function () {
+                console.log('click');
+
+                $('#modal-container').modal({
+                    keyboard: false,
+                    remote: '/People/_Create'
+                }).show();
+            });
+            $('#modal-container').on('hidden.bs.modal', function () {
+                $(this).removeData('bs.modal');
+            });
+            $('#CancelModal').on('click', function () {
+                return false;
+            });
+            $('#smButton').on('click', function () {
+                $('#partial').load('@Url.Action("_Create","People")');
+            });
+        });
+</script>
+}

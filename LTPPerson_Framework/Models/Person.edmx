@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LTPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="person_id" />
+          </Key>
+          <Property Name="person_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="varchar" MaxLength="50" />
+          <Property Name="last_name" Type="varchar" MaxLength="50" />
+          <Property Name="state_id" Type="int" />
+          <Property Name="gender" Type="char" MaxLength="1" />
+          <Property Name="dob" Type="datetime" />
+        </EntityType>
+        <EntityType Name="states">
+          <Key>
+            <PropertyRef Name="state_id" />
+          </Key>
+          <Property Name="state_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="state_code" Type="char" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_person_states">
+          <End Role="states" Type="Self.states" Multiplicity="0..1" />
+          <End Role="person" Type="Self.person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="states">
+              <PropertyRef Name="state_id" />
+            </Principal>
+            <Dependent Role="person">
+              <PropertyRef Name="state_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="uspPersonSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="person_id" Type="int" Mode="In" />
+          <Parameter Name="first_name" Type="varchar" Mode="In" />
+          <Parameter Name="last_name" Type="varchar" Mode="In" />
+          <Parameter Name="state_id" Type="int" Mode="In" />
+          <Parameter Name="gender" Type="char" Mode="In" />
+          <Parameter Name="dob" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="uspPersonUpsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="person_id" Type="int" Mode="In" />
+          <Parameter Name="first_name" Type="varchar" Mode="In" />
+          <Parameter Name="last_name" Type="varchar" Mode="In" />
+          <Parameter Name="state_id" Type="int" Mode="In" />
+          <Parameter Name="gender" Type="char" Mode="In" />
+          <Parameter Name="dob" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="uspStatesList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="LTPModelStoreContainer">
+          <EntitySet Name="person" EntityType="Self.person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="states" EntityType="Self.states" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_person_states" Association="Self.FK_person_states">
+            <End Role="states" EntitySet="states" />
+            <End Role="person" EntitySet="person" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LTPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="person_id" />
+          </Key>
+          <Property Name="person_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="state_id" Type="Int32" />
+          <Property Name="gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="dob" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="state" Relationship="Self.FK_person_states" FromRole="person" ToRole="states" />
+        </EntityType>
+        <EntityType Name="state">
+          <Key>
+            <PropertyRef Name="state_id" />
+          </Key>
+          <Property Name="state_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="state_code" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="people" Relationship="Self.FK_person_states" FromRole="states" ToRole="person" />
+        </EntityType>
+        <Association Name="FK_person_states">
+          <End Role="states" Type="Self.state" Multiplicity="0..1" />
+          <End Role="person" Type="Self.person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="states">
+              <PropertyRef Name="state_id" />
+            </Principal>
+            <Dependent Role="person">
+              <PropertyRef Name="state_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LTPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="people" EntityType="Self.person" />
+          <EntitySet Name="states" EntityType="Self.state" />
+          <AssociationSet Name="FK_person_states" Association="Self.FK_person_states">
+            <End Role="states" EntitySet="states" />
+            <End Role="person" EntitySet="people" />
+          </AssociationSet>
+          <FunctionImport Name="uspPersonSearch" ReturnType="Collection(LTPModel.uspPersonSearch_Result)">
+            <Parameter Name="person_id" Mode="In" Type="Int32" />
+            <Parameter Name="first_name" Mode="In" Type="String" />
+            <Parameter Name="last_name" Mode="In" Type="String" />
+            <Parameter Name="state_id" Mode="In" Type="Int32" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="uspPersonUpsert">
+            <Parameter Name="person_id" Mode="In" Type="Int32" />
+            <Parameter Name="first_name" Mode="In" Type="String" />
+            <Parameter Name="last_name" Mode="In" Type="String" />
+            <Parameter Name="state_id" Mode="In" Type="Int32" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="uspStatesList" ReturnType="Collection(LTPModel.uspStatesList_Result)" />
+        </EntityContainer>
+        <ComplexType Name="uspPersonSearch_Result">
+          <Property Type="Int32" Name="person_id" Nullable="false" />
+          <Property Type="String" Name="first_name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="last_name" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="state_id" Nullable="true" />
+          <Property Type="String" Name="gender" Nullable="true" MaxLength="1" />
+          <Property Type="DateTime" Name="dob" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="uspStatesList_Result">
+          <Property Type="Int32" Name="state_id" Nullable="false" />
+          <Property Type="String" Name="state_code" Nullable="false" MaxLength="2" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LTPModelStoreContainer" CdmEntityContainer="LTPEntities">
+          <EntitySetMapping Name="people">
+            <EntityTypeMapping TypeName="LTPModel.person">
+              <MappingFragment StoreEntitySet="person">
+                <ScalarProperty Name="person_id" ColumnName="person_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="state_id" ColumnName="state_id" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="states">
+            <EntityTypeMapping TypeName="LTPModel.state">
+              <MappingFragment StoreEntitySet="states">
+                <ScalarProperty Name="state_id" ColumnName="state_id" />
+                <ScalarProperty Name="state_code" ColumnName="state_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="uspPersonSearch" FunctionName="LTPModel.Store.uspPersonSearch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LTPModel.uspPersonSearch_Result">
+                <ScalarProperty Name="person_id" ColumnName="person_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="state_id" ColumnName="state_id" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="uspPersonUpsert" FunctionName="LTPModel.Store.uspPersonUpsert" />
+          <FunctionImportMapping FunctionImportName="uspStatesList" FunctionName="LTPModel.Store.uspStatesList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LTPModel.uspStatesList_Result">
+                <ScalarProperty Name="state_id" ColumnName="state_id" />
+                <ScalarProperty Name="state_code" ColumnName="state_code" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
