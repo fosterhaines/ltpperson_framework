@@ -27,6 +27,12 @@
         </div>
         </div>
 </div>
+<form asp-controller="People" asp-action="Index">
+    <p>
+        Title: <input type="text" name="SearchString" />
+        <input type="submit" value="Filter"/>
+    </p>
+</form>
 <table class="table">
     <tr>
         <th>
@@ -70,9 +76,7 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {id = item.person_id}) |
-                <button class="btn btn-primary btn-lg" data-toggle="modal" id="load-partial-edit" onclick="$('#modal-container').modal({ keyboard: false, remote: href }).show();">Edit Modal</button> |
-                @Html.ActionLink("EditPerson", "_Edit", "People", new {id = item.person_id}, new {@class = "btn btn-info", @id = "load-modal-edit", onclick="$('#modal-container').modal({ keyboard: false, remote: href }).show();" }) |
-                @Html.ActionLink("Edit Modal", "_Edit", new {id = item.person_id}) |
+                @Html.ActionLink("EditPerson", "_Edit", "People", new {id = item.person_id}, new {@class = "btn btn-info", @id = "load-modal-edit", onclick= "e.preventDefault(); $('#modal-container').modal({ keyboard: false, remote: href }).show();" }) |
                 @Html.ActionLink("Details", "Details", new {id = item.person_id}) |
                 @Html.ActionLink("Delete", "Delete", new {id = item.person_id})
             </td>
@@ -93,10 +97,10 @@
             //            remote: '/People/_Create'
             //        }).show();
             //    });
-            $('#load-modal-edit').on('click',
-                function(e) {
-                    e.preventDefault();
-                });
+            //$('#load-modal-edit').on('click',
+            //    function(e) {
+            //        e.preventDefault();
+            //    });
             $('#modal-container').on('hidden.bs.modal',
                 function() {
                     $(this).removeData('bs.modal');

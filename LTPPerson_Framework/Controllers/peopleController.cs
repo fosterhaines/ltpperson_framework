@@ -16,9 +16,22 @@ namespace LTPPerson_Framework.Controllers
         private LTPEntities db = new LTPEntities();
 
         // GET: people
-        public async Task<ActionResult> Index()
+        //public async Task<ActionResult> Index()
+        //{
+        //    var people = db.people.Include(p => p.state);
+        //    return View(await people.ToListAsync());
+        //}
+
+        // GET: people
+        public async Task<ActionResult> Index(string searchString)
         {
             var people = db.people.Include(p => p.state);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                
+                var searchResult = db.uspPersonSearch(null, null, searchString, null, null, null);
+                people = people.Where(s => searchResult.Select(u => u.person_id).Contains(s.person_id));
+            }
             return View(await people.ToListAsync());
         }
 
