@@ -149,6 +149,41 @@ namespace LTPPerson_Framework.Controllers
             return PartialView(person);
         }
 
+        // GET: people/Edit/5
+        public async Task<ActionResult> _Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            person person = await db.people.FindAsync(id);
+            if (person == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.state_id = new SelectList(db.states, "state_id", "state_code", person.state_id);
+            return PartialView("_Edit",person);
+        }
+
+        // POST: people/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> _Edit([Bind(Include = "person_id,first_name,last_name,state_id,gender,dob")] person person)
+        {
+            if (ModelState.IsValid)
+            {
+                //db.Entry(person).State = EntityState.Modified;
+                db.uspPersonUpsert(person.person_id, person.first_name, person.last_name, person.state_id, person.gender, person.dob);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            ViewBag.state_id = new SelectList(db.states, "state_id", "state_code", person.state_id);
+            return PartialView(person);
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

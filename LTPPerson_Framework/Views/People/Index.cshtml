@@ -6,15 +6,8 @@
 
 <h2>Index</h2>
 
-<button class="btn btn-primary btn-lg" data-toggle="modal" id="load-partial">Load Create Modal</button>
+<button class="btn btn-primary btn-lg" data-toggle="modal" id="load-partial" onclick="$('#modal-container').modal({ keyboard: false, remote: '/People/_Create' }).show();">Load Create Modal</button>
 
-<p>
-    @Html.ActionLink("Create New", "_Create", null, new { @class = "btn btn-success", id = "createLink" })
-</p>
-<p>
-    <a id="createPersonLink" data-toggle="modal" asp-action="_Create" data-target="#modal-container">Create Person</a>
-</p>
-<button class="btn btn-sm" data-toggle="modal" data-target="exampleModal" id="smButton">Create Small Person</button>
 <div id="modal-container" class="modal fade in">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -58,6 +51,9 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.person_id)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.first_name)
             </td>
             <td>
@@ -73,9 +69,12 @@
                 @Html.DisplayFor(modelItem => item.state.state_code)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.person_id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.person_id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.person_id })
+                @Html.ActionLink("Edit", "Edit", new {id = item.person_id}) |
+                <button class="btn btn-primary btn-lg" data-toggle="modal" id="load-partial-edit" onclick="$('#modal-container').modal({ keyboard: false, remote: href }).show();">Edit Modal</button> |
+                @Html.ActionLink("EditPerson", "_Edit", "People", new {id = item.person_id}, new {@class = "btn btn-info", @id = "load-modal-edit", onclick="$('#modal-container').modal({ keyboard: false, remote: href }).show();" }) |
+                @Html.ActionLink("Edit Modal", "_Edit", new {id = item.person_id}) |
+                @Html.ActionLink("Details", "Details", new {id = item.person_id}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.person_id})
             </td>
         </tr>
     }
@@ -83,25 +82,29 @@
 </table>
 
 @section Scripts {
-<script type="text/javascript">
-        $(function () {
-            $('#load-partial').on('click', function () {
-                console.log('click');
+    <script type="text/javascript">
+        $(function() {
+            //$('#load-partial').on('click',
+            //    function() {
+            //        console.log('click');
 
-                $('#modal-container').modal({
-                    keyboard: false,
-                    remote: '/People/_Create'
-                }).show();
-            });
-            $('#modal-container').on('hidden.bs.modal', function () {
-                $(this).removeData('bs.modal');
-            });
-            $('#CancelModal').on('click', function () {
-                return false;
-            });
-            $('#smButton').on('click', function () {
-                $('#partial').load('@Url.Action("_Create","People")');
-            });
+            //        $('#modal-container').modal({
+            //            keyboard: false,
+            //            remote: '/People/_Create'
+            //        }).show();
+            //    });
+            $('#load-modal-edit').on('click',
+                function(e) {
+                    e.preventDefault();
+                });
+            $('#modal-container').on('hidden.bs.modal',
+                function() {
+                    $(this).removeData('bs.modal');
+                });
+            $('#CancelModal').on('click',
+                function() {
+                    return false;
+                });
         });
-</script>
+    </script>
 }

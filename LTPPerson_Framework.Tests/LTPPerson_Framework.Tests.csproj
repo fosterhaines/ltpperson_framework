@@ -90,7 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -103,6 +102,9 @@
       <Project>{99D2CB32-5C41-4CFA-B932-C0A01CC243DC}</Project>
       <Name>LTPPerson_Framework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
